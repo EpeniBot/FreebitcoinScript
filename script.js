@@ -67,6 +67,7 @@ var
     currentTime,
     forceStopped = false,
     alreadyrun = false,
+    runAsLoop = false,
     betOverProfit = false;
 
 
@@ -100,7 +101,11 @@ function startGame() {
         betoverprofit = prompt("Bet over Profit? It ensures, you won't lose. Game will stop if bet would be higher than your profit. (true/false)", 'false');
         stopAtMinProfit = prompt("Should I stop when I go below the minimal Profit? (true/false)", "false");
         if (stopAtMinProfit == true) {
-            minProfit = prompt("What should the minimal Profit be then?", "-0.00000005")
+            minProfit = prompt("What should the minimal Profit be then?", '-0.00000005');
+        }
+    } else {
+        if (runAsLoop == false) {
+            runAsLoop = prompt("Should this run as a loop and restart if it stops? (true/false)", 'false');
         }
     }
     alreadyrun = true;
@@ -162,7 +167,11 @@ function roll() {
         stopGame()
     }
     if (forceStopped) {
-        return false;
+        if (runAsLoop == false) {
+            return false;
+        } else {
+            startGame();
+        }
     }
     if (betOverProfit == false) {
         if (currentBet >= profit && profit > 0.00000004) {
@@ -236,14 +245,21 @@ function updateValues() {
 $('#double_your_btc_bet_lose').bind("DOMSubtreeModified", function (event) {
         if ($(event.currentTarget).is(':contains("lose")')) {
             if (forceStopped) {
-                updateConsole();
-                return false;
+                if (runAsLoop == false) {
+                    return false;
+                } else {
+                    startGame();
+                }
             }
             gamesLost++;
             console.log('You LOST! Doubling Bet...');
             doubleBet();
             if (forceStopped) {
-                return false;
+                if (runAsLoop == false) {
+                    return false;
+                } else {
+                    startGame();
+                }
             }
             roll();
         }
@@ -254,8 +270,11 @@ $('#double_your_btc_bet_lose').bind("DOMSubtreeModified", function (event) {
 $('#double_your_btc_bet_win').bind("DOMSubtreeModified", function (event) {
         if ($(event.currentTarget).is(':contains("win")')) {
             if (forceStopped) {
-                updateConsole();
-                return false;
+                if (runAsLoop == false) {
+                    return false;
+                } else {
+                    startGame();
+                }
             }
             gamesWon++;
             console.log('You WON!');
@@ -268,7 +287,11 @@ $('#double_your_btc_bet_win').bind("DOMSubtreeModified", function (event) {
                 return false;
             }
             if (forceStopped) {
-                return false;
+                if (runAsLoop == false) {
+                    return false;
+                } else {
+                    startGame();
+                }
             }
             roll();
         }
