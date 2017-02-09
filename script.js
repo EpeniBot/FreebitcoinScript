@@ -37,7 +37,8 @@ console.clear();
 // (notice how beautifully you can do that, also how "," and ";" are used.)
 
 var
-    maxWait = 100,      // as we don't want any hickups with TCP response, "," for ending of the variable
+    totalStartbalance= $('#balance').text(),
+maxWait = 100,      // as we don't want any hickups with TCP response, "," for ending of the variable
     minWait = 1000,     // we don't want to wait too long either ;-), ";" to end the whole declaration
     stopBefore = 3;     // As the site refreshes 60 Minutes after getting "free btc", we stop the bot, when it's 3 Minutes left.
 $lowButton = $('#double_your_btc_bet_lo_button'),
@@ -86,6 +87,11 @@ function reset() {
 
 
 function startGame() {
+
+    $('#double_your_btc_bet_lose').unbind();
+    $('#double_your_btc_bet_win').unbind();
+
+    bind();
     // first we change our Button's text and tell it to stop our Bot, if it is clicked again:
     document.getElementById("advertise_link_li").innerHTML = '<a href="#" onclick="stopGame()" class="advertise_link">STOP BOT</a>';
     stopped = false;
@@ -104,8 +110,9 @@ function startGame() {
             minProfit = prompt("What should the minimal Profit be then?", '-0.00000005');
         }
     } else {
-        if (runAsLoop == false) {
+        if (!runAsLoop) {
             runAsLoop = prompt("Should this run as a loop and restart if it stops? (true/false)", 'false');
+            reset();
         }
     }
     alreadyrun = true;
@@ -141,6 +148,7 @@ function forceStop(msg) {
     updateConsole(msg);
     document.getElementById("advertise_link_li").innerHTML = '<a href="#" onclick="startGame()" class="advertise_link">RESTART BOT</a>';
     console.log('Game stopping!');
+    stopped=true;
     forceStopped = true;
 }
 
@@ -211,7 +219,8 @@ function updateConsole(msg) {
     updateValues();
 
     console.clear();
-
+    console.log("Total Startbalance: " + totalStartbalance);
+    console.log("Current balance:" + currentBalance);
     console.log('Round #' + round + ' / ' + stopAt);
     console.log('Profit: ' + profit + ' Bitcoin');
     console.log('Highest bet: ' + highestBet);
@@ -240,65 +249,73 @@ function updateValues() {
     }
 }
 
+function bind() {
 
 //
-$('#double_your_btc_bet_lose').bind("DOMSubtreeModified", function (event) {
-        if ($(event.currentTarget).is(':contains("lose")')) {
-            if (forceStopped) {
-                if (runAsLoop == false) {
-                    return false;
-                } else {
-                    startGame();
+    $('#double_your_btc_bet_lose').bind("DOMSubtreeModified", function (event) {
+            if ($(event.currentTarget).is(':contains("lose")')) {
+                if (forceStopped) {
+                    if (!runAsLoop) {
+                        return false;
+                    } else {
+                        startGame();
+                        return false;
+                    }
                 }
-            }
-            gamesLost++;
-            console.log('You LOST! Doubling Bet...');
-            doubleBet();
-            if (forceStopped) {
-                if (runAsLoop == false) {
-                    return false;
-                } else {
-                    startGame();
+                gamesLost++;
+                console.log('You LOST! Doubling Bet...');
+                doubleBet();
+                if (forceStopped) {
+
+                    if (!runAsLoop) {
+                        return false;
+                    } else {
+                        startGame();
+                        return false;
+                    }
+
                 }
+                roll();
             }
-            roll();
         }
-    }
-);
+    );
 
 // Winner
-$('#double_your_btc_bet_win').bind("DOMSubtreeModified", function (event) {
-        if ($(event.currentTarget).is(':contains("win")')) {
-            if (forceStopped) {
-                if (runAsLoop == false) {
-                    return false;
-                } else {
-                    startGame();
+    $('#double_your_btc_bet_win').bind("DOMSubtreeModified", function (event) {
+            if ($(event.currentTarget).is(':contains("win")')) {
+                if (forceStopped) {
+                    if (!runAsLoop) {
+                        return false;
+                    } else {
+                        startGame();
+                        return false;
+                    }
                 }
-            }
-            gamesWon++;
-            console.log('You WON!');
-            if (stopBeforeRedirect()) {
-                return;
-            }
-            reset();
-            if (stopped) {
-                stopped = false;
-                return false;
-            }
-            if (forceStopped) {
-                if (runAsLoop == false) {
-                    return false;
-                } else {
-                    startGame();
+                gamesWon++;
+                console.log('You WON!');
+                if (stopBeforeRedirect()) {
+                    return;
                 }
+                reset();
+                if (stopped) {
+                    stopped = false;
+                    return false;
+                }
+                if (forceStopped) {
+                    if (!runAsLoop) {
+                        return false;
+                    } else {
+                        startGame();
+                        return false;
+                    }
+                }
+                roll();
             }
-            roll();
+
         }
+    );
 
-    }
-);
-
+}
 
 console.clear();
 console.log("thank you for using my script, yours Wladastic!");
