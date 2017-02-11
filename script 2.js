@@ -14,8 +14,8 @@ var
     stopBefore = 3;     // As the site refreshes 60 Minutes after getting "free btc", we stop the bot, when it's 3 Minutes left.
 $lowButton = $('#double_your_btc_bet_lo_button'),
     $highButton = $('#double_your_btc_bet_hi_button'),
-    saveBalancePercent = 2, // if profit reaches this percentage, the game will reset.
-    stopToWithdrawAt = 0.00033000; // amount at which we stop to make a transaction to our btc wallet!!
+    saveBalancePercent = 2 , // if profit reaches this percentage, the game will reset.
+    stopToWithdrawAt = 0.00033000 ; // amount at which we stop to make a transaction to our btc wallet!!
 
 // now we declare Variables we want to change:
 
@@ -49,6 +49,7 @@ var
 /**
  * TODO: remove events and let the script check itself, so no parralel processing is possible
  * TODO: add half to win, so that on a lose you will double and on win you don't reset, but put currentBet on 50%
+ * TODO:    best if added ingame only if btc amount is at 3000 satoshi
  */
 
 
@@ -98,9 +99,6 @@ function restart() {
     forceStop("restarted!");
 }
 
-
-$('#double_your_btc_bet_lose').unbind();
-$('#double_your_btc_bet_win').unbind();
 
 bind();
 
@@ -179,6 +177,7 @@ function stopGame() {
 
 
 function startGame() {
+    $('#double_your_btc_stake').val(startBet);
     updateConsole();
     gameRunning = true;
     startBalance = $('#balance').text();
@@ -204,9 +203,11 @@ function startGame() {
             minProfit = prompt("What should the minimal Profit be then?", '-0.00000005');
         }
     } else {
-        if (!runAsLoop || !restarted) {
+        if (!runAsLoop && !restarted) {
             if (running){
-                prompt("something went wrong, close this window to avoid damage.");
+                prompt("something went wrong, refreshing this window to avoid damage after you click ok/cancel.");
+                window.location.reload();
+                return false;
             }
             runAsLoop = prompt("Should this run as a loop and restart if it stops? (true/false)", 'false');
             reset();
