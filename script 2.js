@@ -178,9 +178,14 @@ function stopGame() {
 
 function startGame() {
     $('#double_your_btc_stake').val(startBet);
-    updateConsole();
-    gameRunning = true;
     startBalance = $('#balance').text();
+    updateConsole();
+    if (startBalance < 0.00003000){
+        prompt("You do not have enough BTC, this is too risky! please collect at least 0.00003000 BTC")
+        return false;
+    }
+
+    gameRunning = true;
     if (startBalance == 0) {
         forceStop("no money left!");
         return;
@@ -230,6 +235,17 @@ function startGame() {
 function doubleBet() {
     currentBet = $('#double_your_btc_stake').val();
     newBet = (currentBet * 2).toFixed(8);
+
+    $('#double_your_btc_stake').val(newBet);
+    updateConsole();
+
+}
+
+
+function halveBet() {
+    currentBet = $('#double_your_btc_stake').val();
+
+    newBet = (currentBet / 2).toFixed(8);
 
     $('#double_your_btc_stake').val(newBet);
     updateConsole();

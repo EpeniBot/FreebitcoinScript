@@ -23,12 +23,6 @@
  */
 
 
-/**
- * TODO: let this bot save when collecting 100 satoshi
- *
- *
- *
- */
 // Here we first clean up our console:
 console.clear();
 
@@ -152,6 +146,10 @@ bind();
 function startGame() {
     gameRunning = true;
     startBalance = $('#balance').text();
+    if (startBalance < 0.00003000){
+        prompt("You do not have enough BTC, this is too risky! please collect at least 0.00003000 BTC")
+        return false;
+    }
     if (startBalance == 0) {
         forceStop("no money left!");
         return;
