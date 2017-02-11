@@ -1,15 +1,19 @@
 # FreebitcoinScript
 This script is to play around with the Multiplier in Freebitco.in
 
-FAQ:
-    * Why are there two scripts?
-      Because the first one is based on the original, the second (script 2) does a slightly different approach.
-      It restarts itself to prevent losing large amounts of money and stops when you have enough to payout.
-      And also the script 2 prevents accidental parralel processing, by stopping such processes on the go.
-    * How much money is recommended?
-      To be sure your bot will earn any cash, you need around 0.00003000 BTC, as the stake doubles for every lose, it may happen, that you would lose everything so be carefull!
-    * How did you get the idea?
-         I got this Idea from https://crd.ht/2N7QJYt , but I don't really know if this is the real source, as I found more people claiming it was theirs
+FAQ:  
+
+* Why are there two scripts? 
+
+  Because the first one is based on the original, the second (script 2) does a slightly different approach. It restarts itself to prevent losing large amounts of money and stops when you have enough to payout. And also the script 2 prevents accidental parralel processing, by stopping such processes on the go. *
+    
+* How much money is recommended? 
+    
+   To be sure your bot will earn any cash, you need around 0.00003000 BTC, as the stake doubles for every lose, it may happen, that you would lose everything so be carefull! 
+    
+* Where did you get the idea from? 
+
+   I got this Idea from https://crd.ht/2N7QJYt , but I don't really know if this is the real source, as I found more people claiming it was theirs 
 
 /**     PLEASE READ!!!      ****************************************************
  *
