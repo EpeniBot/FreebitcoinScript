@@ -205,6 +205,9 @@ function startGame() {
         }
     } else {
         if (!runAsLoop || !restarted) {
+            if (running){
+                prompt("something went wrong, close this window to avoid damage.");
+            }
             runAsLoop = prompt("Should this run as a loop and restart if it stops? (true/false)", 'false');
             reset();
         }
@@ -275,6 +278,7 @@ function bind() {
                     console.log('You LOST! Doubling Bet...');
                     doubleBet();
                     if (restarted) {
+                        running = false;
                         startGame();
                         return false;
                     }
@@ -283,8 +287,10 @@ function bind() {
 
                         if (!runAsLoop) {
                             console.log("not running as a loop, so I stop here");
+                            running = false;
                             return false;
                         } else {
+                            running = false;
                             startGame();
                             return false;
                         }
@@ -298,8 +304,10 @@ function bind() {
                         forceStopped = false;
 
                         if (!runAsLoop) {
+                            running = false;
                             return false;
                         } else {
+                            running = false;
                             startGame();
                             return false;
                         }
@@ -323,17 +331,21 @@ function bind() {
                     reset();
                     if (stopped && !restarted) {
                         stopped = false;
+                        running = false;
                         return false;
                     }
                     if (forceStopped) {
                         forceStopped = false;
                         if (restarted) {
                             startGame();
+                            running = false;
                             return false;
                         }
                         if (!runAsLoop) {
+                            running = false;
                             return false;
                         } else {
+                            running = false;
                             startGame();
                             return false;
                         }
