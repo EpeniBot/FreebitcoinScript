@@ -36,6 +36,8 @@ INSTRUCTIONS:
   Please support me by creating your account through this link:
   http://freebitco.in/?r=481926
  
+ Collect at least 3000 Satoshi (0.00003000 BTC) before you start, or the risk of losing is too high!
+ 
  * To run this bot, open up your Google Chrome Console by pressing "Ctrl+Shift+J"
  * On Firefox Press F12 and navigate to the console.
  * copy and paste one of the scripts into the console and hit Enter.
