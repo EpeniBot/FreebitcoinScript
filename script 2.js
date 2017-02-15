@@ -3,10 +3,8 @@
  */
 console.clear();
 
-// next we add Variables needed in the script,
-// to make this script clearly readable, we first declare variables, that do not change:
-// (notice how beautifully you can do that, also how "," and ";" are used.)
-
+// This script is less educational, it's rather messy and still in developement, but it... does work!
+//  To those who use my script successfully already, feel free to compare this one with the other one.
 var
     totalStartbalance = $('#balance').text(),
     maxWait = 200,      // as we don't want any hickups with TCP response, "," for ending of the variable
@@ -15,7 +13,7 @@ var
 $lowButton = $('#double_your_btc_bet_lo_button'),
     $highButton = $('#double_your_btc_bet_hi_button'),
     saveBalancePercent = 2 , // if profit reaches this percentage, the game will reset.
-    stopToWithdrawAt = 0.00033000 ; // amount at which we stop to make a transaction to our btc wallet!!
+    stopToWithdrawAt = 0.00033000; // amount at which we stop to make a transaction to our btc wallet!!
 
 // now we declare Variables we want to change:
 
@@ -53,10 +51,6 @@ var
  */
 
 
-
-
-
-
 // Unbind if you used this code before
 //
 $('#double_your_btc_bet_lose').unbind();
@@ -68,13 +62,13 @@ document.getElementById("advertise_link_li").innerHTML = '<a href="#" onclick="s
 //the following disables the auto start, to make sure you don't trigger some insane parallel processing stuff
 document.getElementById("auto_betting_button").innerHTML = '<a href="#" onclick="stopGame()" style="visibility: hidden" class="auto_bet_element">DISABLED</a>';
 
-
 function getRandomWait() {
     var wait = Math.floor(Math.random() * maxWait) + 100; //(Math.floor(Math.random() * 800) + 300)  ; // avant 100
     if (wait > minWait) wait = minWait;
     console.log('Waiting for ' + wait + 'ms before next bet.');
     return wait;
 }
+
 function forceStop(msg) {
     updateConsole(msg);
     document.getElementById("advertise_link_li").innerHTML = '<a href="#" onclick="startGame()" class="advertise_link">RESTART BOT</a>';
@@ -85,7 +79,6 @@ function forceStop(msg) {
     }
     forceStopped = true;
 }
-
 
 function reset() {
     $('#double_your_btc_stake').val(startBet);
@@ -99,9 +92,7 @@ function restart() {
     forceStop("restarted!");
 }
 
-
 bind();
-
 
 function check() {
     updateConsole();
@@ -136,7 +127,6 @@ function stopBeforeRedirect() {
     }
     return false;
 }
-
 
 function roll() {
     updateConsole();
@@ -177,19 +167,20 @@ function stopGame() {
 
 
 function startGame() {
+    // using JQuery we get our scope to the balance element of our html, then get it's text and then we save it as our startBalance as a reference
     $('#double_your_btc_stake').val(startBet);
     startBalance = $('#balance').text();
     updateConsole();
-    if (startBalance < 0.00003000){
-        prompt("You do not have enough BTC, this is too risky! please collect at least 0.00003000 BTC")
-        return false;
-    }
-
-    gameRunning = true;
     if (startBalance == 0) {
         forceStop("no money left!");
         return;
     }
+    if (startBalance < 0.00003000) {
+        prompt("You do not have enough BTC, this is too risky! please collect at least 0.00003000 BTC")
+        return false;
+    }
+    gameRunning = true;
+
     // first we change our Button's text and tell it to stop our Bot, if it is clicked again:
     document.getElementById("advertise_link_li").innerHTML = '<a href="#" onclick="stopGame()" class="advertise_link">STOP BOT</a>';
     stopped = false;
@@ -209,7 +200,7 @@ function startGame() {
         }
     } else {
         if (!runAsLoop && !restarted) {
-            if (running){
+            if (running) {
                 prompt("something went wrong, refreshing this window to avoid damage after you click ok/cancel.");
                 window.location.reload();
                 return false;
@@ -220,10 +211,6 @@ function startGame() {
     }
     restarted = false;
     alreadyrun = true;
-    // using JQuery we get our scope to the balance element of our html, then get it's text and then we save it as our startBalance as a reference
-
-    // setting lastbet to our startBet, as we haven't played a round yet.
-
     round = 0;
     gamesLost = 0;
     gamesWon = 0;
@@ -235,21 +222,17 @@ function startGame() {
 function doubleBet() {
     currentBet = $('#double_your_btc_stake').val();
     newBet = (currentBet * 2).toFixed(8);
-
     $('#double_your_btc_stake').val(newBet);
     updateConsole();
-
 }
-
 
 function halveBet() {
     currentBet = $('#double_your_btc_stake').val();
-
-    newBet = (currentBet / 2).toFixed(8);
-
+    if (currentBet > 0.00000001) {
+        newBet = (currentBet / 2).toFixed(8);
+    }
     $('#double_your_btc_stake').val(newBet);
     updateConsole();
-
 }
 
 function updateValues() {
@@ -344,7 +327,7 @@ function bind() {
                     gamesWon++;
                     console.log('You WON!');
                     //if (stopBeforeRedirect()) {
-                     ////}
+                    ////}
                     reset();
                     if (stopped && !restarted) {
                         stopped = false;
